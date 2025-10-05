@@ -1,6 +1,3 @@
-const API_KEY = "YOUR_API_KEY_HERE"; // Replace with your OpenWeatherMap API key
-const BASE_URL = "https://api.openweathermap.org/data/2.5";
-
 let weatherGrid = document.getElementById("weather-grid");
 let cityInput = document.getElementById("cityInput");
 let getWeatherbtn = document.getElementById("getWeatherBtn");
@@ -8,7 +5,8 @@ let myLocationBtn = document.getElementById("locationBtn");
 
 async function getWeatherData(city) {
     try {
-        const res = await fetch(`${BASE_URL}/weather?q=${city}&appid=${API_KEY}&units=metric`);
+        const res = await fetch(`/api/weather?city=${encodeURIComponent(city)}`);
+
         if (!res.ok) {
             if (res.status === 404) {
                 weatherGrid.innerHTML = `<div class="error">❌ City "${city}" not found.</div>`;
@@ -17,7 +15,7 @@ async function getWeatherData(city) {
             } else {
                 weatherGrid.innerHTML = `<div class="error">⚠️ Error: ${res.status} ${res.statusText}</div>`;
             }
-            return; 
+            return;
         }
         const data = await res.json();
         const temp = data.main.temp;
@@ -93,7 +91,8 @@ function error(e) {
 
 async function getWeatherDataByUserLocation(lat, long) {
     try {
-        const res = await fetch(`${BASE_URL}/weather?lat=${lat}&lon=${long}&appid=${API_KEY}&units=metric`);
+        const res = await fetch(`/api/weather?lat=${lat}&lon=${long}`);
+
         if (!res.ok) {
             if (res.status === 404) {
                 weatherGrid.innerHTML = `<div class="error">❌ Location not found.</div>`;
@@ -102,7 +101,7 @@ async function getWeatherDataByUserLocation(lat, long) {
             } else {
                 weatherGrid.innerHTML = `<div class="error">⚠️ Error: ${res.status} ${res.statusText}</div>`;
             }
-            return; 
+            return;
         }
 
         const data = await res.json();
